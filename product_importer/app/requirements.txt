@@ -7,4 +7,4 @@ jinja2==3.1.2               # Template engine for HTML pages
 httpx==0.25.0               # HTTP client for any outgoing API requests
 python-multipart==0.0.6     # Needed for file uploads (CSV upload)
 
-python --3.10.12
+python==3.10.12
