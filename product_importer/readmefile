@@ -1,0 +1,136 @@
+# Product Importer App
+
+A web-based application for managing products and webhooks, including bulk product import from CSV files. Built with **FastAPI**, **PostgreSQL**, **Celery**, and **Redis**, with a simple frontend to interact with the API.
+
+---
+
+## Features
+
+### Products
+- Add, edit, and delete individual products
+- Bulk CSV import with progress tracking
+- Filter products by SKU, Name, and Active status
+- Paginated product listing
+
+### Webhooks
+- Add, edit, test, and delete webhooks
+- Manage multiple webhooks
+- Enable/disable webhooks
+- View webhook response and test results
+
+### Tech Stack
+- **Backend:** FastAPI, SQLAlchemy, Celery
+- **Frontend:** HTML/JS
+- **Database:** PostgreSQL
+- **Task Queue:** Celery + Redis
+- **Python Version:** 3.10+
+
+---
+
+## Project Structure
+
+app/
+├── main.py # FastAPI app entry
+├── models.py # SQLAlchemy models
+├── schemas.py # Pydantic schemas
+├── routers/
+│ ├── products.py # Product CRUD endpoints
+│ ├── upload.py # CSV upload endpoint
+│ └── webhooks.py # Webhook endpoints
+├── tasks.py # Celery tasks for CSV import
+├── database.py # Database session & engine
+static/
+├── main.js # Frontend JS
+templates/
+├── index.html # Frontend HTML
+
+yaml
+Copy code
+
+---
+
+## Requirements
+
+- Python 3.10+
+- PostgreSQL
+- Redis
+### Python Packages
+Install dependencies with:
+
+```bash
+pip install -r requirements.txt
+Typical requirements.txt includes:
+
+css
+Copy code
+fastapi
+uvicorn[standard]
+sqlalchemy
+psycopg2-binary
+pydantic
+celery
+redis
+httpx
+python-multipart
+Setup & Run
+1. Database Setup
+Create a PostgreSQL database and user:
+
+sql
+Copy code
+CREATE DATABASE product_db;
+CREATE USER product_user WITH PASSWORD 'yourpassword';
+GRANT ALL PRIVILEGES ON DATABASE product_db TO product_user;
+Update your database URL in .env or app/database.py:
+
+bash
+Copy code
+DATABASE_URL=postgresql://product_user:yourpassword@localhost:5432/product_db
+2. Redis Setup
+Install and start Redis:
+
+bash
+Copy code
+sudo apt install redis-server
+sudo service redis start
+Default URL: redis://localhost:6379/0
+
+create tables automatically via SQLAlchemy:
+
+from app.database import Base, engine
+from app.models import *
+Base.metadata.create_all(bind=engine)
+
+4. Run Celery Worker
+celery -A app.tasks.celery_app worker --loglevel=info
+
+5. Run FastAPI App
+uvicorn app.main:app --reload
+
+
+Open the app in your browser:
+
+http://127.0.0.1:8000
+
+Usage
+
+Upload CSV file through Products → Upload CSV File
+
+Create / update products manually in the Products tab
+
+Add webhooks in the Webhooks tab
+
+Monitor CSV upload progress via the progress bar
+
+Test webhook endpoints using the Test button
+
+CSV Format
+
+The CSV should have headers:
+
+sku,name,description,active
+SKU001,Product Name 1,Description 1,true
+SKU002,Product Name 2,Description 2,false
+
+
+active should be true or false

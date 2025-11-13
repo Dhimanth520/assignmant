@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product & Webhook Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, button, select { padding: 5px; margin: 5px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .progress-bar { width: 100%; background: #eee; margin-top: 10px; }
+        .progress-bar-fill { height: 20px; background: green; width: 0%; color: white; text-align: center; }
+        .pagination { margin-top: 15px; text-align: center; }
+        .pagination button { margin: 0 5px; }
+        .tab {
+            display: inline-block;
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            cursor: pointer;
+            background: #f9f9f9;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background: #fff;
+            border-top: 2px solid #4CAF50;
+            font-weight: bold;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<!-- Tabs -->
+<div>
+    <div class="tab active" onclick="showTab('productsTab', event)">Products</div>
+    <div class="tab" onclick="showTab('webhooksTab', event)">Webhooks</div>
+</div>
+
+<hr>
+
+
+<!-- Product tab -->
+<div id="productsTab" class="tab-content active">
+    <h2>Upload CSV File</h2>
+    <input type="file" id="csvFile">
+    <button onclick="uploadCSV()">Upload</button>
+    <div class="progress-bar">
+        <div id="progressFill" class="progress-bar-fill">0%</div>
+    </div>
+    <div id="uploadStatus"></div>
+
+    <hr>
+
+    <h3>Create / Update Product</h3>
+    <div>
+        <input type="hidden" id="productId">
+        <input type="text" id="sku" placeholder="SKU">
+        <input type="text" id="name" placeholder="Name">
+        <input type="text" id="description" placeholder="Description">
+        <select id="active">
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+        </select>
+        <button onclick="saveProduct()">Save</button>
+    </div>
+
+    <h2>Product List</h2>
+    <div>
+        <input type="text" id="filterSku" placeholder="Filter by SKU">
+        <input type="text" id="filterName" placeholder="Filter by Name">
+        <select id="filterActive">
+            <option value="">All</option>
+            <option value="true">Active</option>
+            <option value="false">Inactive</option>
+        </select>
+        <button onclick="loadProducts()">Filter</button>
+        <button onclick="showAllProducts()">Show All</button>  
+        <button onclick="deleteAllProducts()">Delete All</button>
+    </div>
+
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="pagination">
+        <button id="prevPage" onclick="changePage(-1)">Previous</button>
+        <span id="pageInfo">Page 1</span>
+        <button id="nextPage" onclick="changePage(1)">Next</button>
+    </div>
+</div>
+
+
+<!-- Webhooks tab -->
+<div id="webhooksTab" class="tab-content">
+    <h2>Webhook Configuration</h2>
+
+    <h3>Add / Edit Webhook</h3>
+    <input type="hidden" id="webhookId">
+    <input type="text" id="webhookUrl" placeholder="Webhook URL">
+    <select id="webhookEvent">
+        <option value="product.created">Product Created</option>
+        <option value="product.updated">Product Updated</option>
+        <option value="product.deleted">Product Deleted</option>
+    </select>
+    <label>
+        <input type="checkbox" id="webhookEnabled" checked> Enabled
+    </label>
+    <button onclick="saveWebhook()">Save</button>
+
+    <h3>Webhook List</h3>
+    <table id="webhookTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>URL</th>
+                <th>Event</th>
+                <th>Enabled</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    // Tab switching
+    function showTab(tabId, evt) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        evt.currentTarget.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+</script>
+
+<script src="/static/main.js"></script>
+</body>
+</html>
