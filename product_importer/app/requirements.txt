@@ -1,8 +1,10 @@
-fastapi
-uvicorn[standard]
-sqlalchemy
-psycopg2-binary
-pydantic
-jinja2
-httpx
+fastapi==0.111.0            # Core FastAPI framework
+uvicorn[standard]==0.23.1   # ASGI server to run FastAPI
+sqlalchemy==2.0.22          # ORM for database
+psycopg2-binary==2.9.9      # PostgreSQL driver
+pydantic==2.6.0             # Data validation (used by FastAPI)
+jinja2==3.1.2               # Template engine for HTML pages
+httpx==0.25.0               # HTTP client for any outgoing API requests
+python-multipart==0.0.6     # Needed for file uploads (CSV upload)
+
 python --3.10.12
